@@ -1,4 +1,6 @@
 Rottenpotatoes::Application.routes.draw do
+  match '/movies/same_director/:id', :to => 'movies#same_director'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

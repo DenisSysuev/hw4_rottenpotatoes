@@ -33,7 +33,12 @@ class MoviesController < ApplicationController
       flash.keep
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
-    @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+    if (params[:director]) 
+    	@movies = Movie.find_rating_director(@selected_ratings.keys, 
+			params[:director], ordering)
+    else
+	@movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+    end
   end
 
   def new
@@ -64,4 +69,13 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def same_director
+    @movie = Movie.find(params[:id])
+    if (@movie.director && @movie.director != "")
+    	redirect_to movies_path(:director => @movie.director)
+    else 
+	flash[:notice] = "Movie '#{@movie.title}' has no director info"
+	redirect_to movies_path
+    end
+  end
 end
